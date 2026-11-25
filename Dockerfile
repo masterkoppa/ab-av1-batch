@@ -14,7 +14,9 @@ RUN pacman -Syu --noconfirm && \
 COPY encode.sh /usr/local/bin/encode.sh
 
 ENV TARGET_CODEC=AV1
+ENV PRESET=8
 ENV MIN_VMAF=95
+ENV MAX_ENCODED_PERCENT=80
 
 VOLUME ["/encode-targets", "/output"]
 

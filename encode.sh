@@ -4,7 +4,9 @@ set -euo pipefail
 ENCODE_DIR="/encode-targets"
 OUTPUT_DIR="/output"
 TARGET_CODEC="${TARGET_CODEC:-AV1}"
+PRESET="${PRESET:-8}"
 MIN_VMAF="${MIN_VMAF:-95}"
+MAX_ENCODED_PERCENT="${MAX_ENCODED_PERCENT:-80}"
 
 # Map target to ab-av1 encoder name and codec detection name
 case "${TARGET_CODEC^^}" in
@@ -23,10 +25,12 @@ case "${TARGET_CODEC^^}" in
 esac
 
 echo "=== ab-av1 batch encoder ==="
-echo "Target codec: $TARGET_CODEC ($ENCODER)"
-echo "Min VMAF:     $MIN_VMAF"
-echo "Source:       $ENCODE_DIR"
-echo "Output:       $OUTPUT_DIR"
+echo "Target codec:        $TARGET_CODEC ($ENCODER)"
+echo "Preset:              $PRESET"
+echo "Min VMAF:            $MIN_VMAF"
+echo "Max encoded percent: $MAX_ENCODED_PERCENT"
+echo "Source:              $ENCODE_DIR"
+echo "Output:              $OUTPUT_DIR"
 echo ""
 
 TOTAL=0
@@ -56,7 +60,8 @@ while IFS= read -r -d '' file; do
   mkdir -p "$out_dir"
 
   if ab-av1 auto-encode -i "$file" -o "$out_file" \
-    --encoder "$ENCODER" --min-vmaf "$MIN_VMAF" --acodec copy; then
+    --encoder "$ENCODER" --preset "$PRESET" --min-vmaf "$MIN_VMAF" \
+    --max-encoded-percent "$MAX_ENCODED_PERCENT" --acodec copy; then
     ENCODED=$((ENCODED + 1))
     orig_size=$(stat -c%s "$file")
     new_size=$(stat -c%s "$out_file")
