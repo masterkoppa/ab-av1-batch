@@ -15,7 +15,9 @@ docker run --rm \
   -v /path/to/videos:/encode-targets:ro \
   -v /path/to/output:/output \
   -e TARGET_CODEC=AV1 \
+  -e PRESET=8 \
   -e MIN_VMAF=95 \
+  -e MAX_ENCODED_PERCENT=80 \
   ab-av1-batch
 ```
 
@@ -24,7 +26,9 @@ docker run --rm \
 | Variable | Default | Description |
 |---|---|---|
 | `TARGET_CODEC` | `AV1` | Target codec: `AV1` or `HEVC` |
+| `PRESET` | `8` | Preset (0-13) |
 | `MIN_VMAF` | `95` | Minimum VMAF quality score (0-100). Higher = better quality, larger files |
+| `MAX_ENCODED_PERCENT` | `80` | Maximum accepted size compared to source |
 
 ## Behavior
 
@@ -50,7 +54,9 @@ docker run --rm \
   -v ~/media:/encode-targets:ro \
   -v ~/media-encoded:/output \
   -e TARGET_CODEC=HEVC \
+  -e PRESET=8 \
   -e MIN_VMAF=93 \
+  -e MAX_ENCODED_PERCENT=80 \
   ab-av1-batch
 ```
 
